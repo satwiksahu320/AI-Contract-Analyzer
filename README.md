@@ -79,3 +79,21 @@ git clone https://github.com/satwiksahu320/AI-Contract-Analyzer.git
 cd AI-Contract-Analyzer
 pip install -r requirements.txt
 python manage.py runserver
+```
+
+## 👨‍💻 Contribution
+
+This project was developed as a team collaboration.
+
+- **My Role (AI/ML):**
+  - Built and trained machine learning models for risk prediction
+  - Implemented NLP pipeline (text extraction, preprocessing)
+  - Integrated models into backend APIs
+  - Worked on text classification and risk scoring logic
+
+- **Teammate Role (Backend):**
+  - Backend development using Django
+  - API design and database management
+  - Authentication system and dashboard UI
+
+**Teammate:** [Om Prakash Pani](https://github.com/omprakashpani)
