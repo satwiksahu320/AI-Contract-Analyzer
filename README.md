@@ -79,7 +79,7 @@ git clone https://github.com/satwiksahu320/AI-Contract-Analyzer.git
 cd AI-Contract-Analyzer
 pip install -r requirements.txt
 python manage.py runserver
-
+```
 
 ## 👨‍💻 Contribution
 
