@@ -1,0 +1,7 @@
+Django==5.2.4
+djangorestframework
+mysqlclient
+Pillow
+PyPDF2
+scikit-learn
+numpy

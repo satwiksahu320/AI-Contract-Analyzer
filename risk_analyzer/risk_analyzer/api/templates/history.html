@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskAI | History</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="/api/">
+            <span class="brand-mark">R</span>
+            <span>
+                <strong>RiskAI</strong>
+                <small>Credit intelligence</small>
+            </span>
+        </a>
+
+        <nav class="menu" aria-label="Primary navigation">
+            <a href="/api/"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a class="active" href="/api/history/"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+            <a href="/api/profile/"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="/api/logout/"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Audit trail</p>
+                <h1>Prediction history</h1>
+            </div>
+            <a class="secondary-button" href="/api/">New analysis</a>
+        </header>
+
+        <section class="panel table-panel">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Prediction</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prediction in predictions %}
+                    <tr>
+                        <td>{{ prediction.prediction }}</td>
+                        <td>{{ prediction.score }}%</td>
+                        <td>{{ prediction.created_at|date:"M d, Y H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="empty-state">No predictions yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+
+</html>

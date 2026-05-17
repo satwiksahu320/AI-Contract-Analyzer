@@ -1,0 +1,82 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>PDF Uploads</title>
+
+<link rel="stylesheet"
+href="{% static 'css/style.css' %}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<aside class="sidebar">
+
+<div class="logo">
+<h2>RiskAI</h2>
+</div>
+
+<ul class="menu">
+
+<li onclick="location.href='/api/'">
+<i class="fa-solid fa-chart-line"></i>
+Dashboard
+</li>
+
+<li onclick="location.href='/api/risk-analysis/'">
+<i class="fa-solid fa-brain"></i>
+Risk Analysis
+</li>
+
+<li onclick="location.href='/api/pdf-uploads/'">
+<i class="fa-solid fa-file-pdf"></i>
+PDF Uploads
+</li>
+
+<li onclick="location.href='/api/analytics/'">
+<i class="fa-solid fa-chart-pie"></i>
+Analytics
+</li>
+
+<li onclick="location.href='/api/history/'">
+<i class="fa-solid fa-clock-rotate-left"></i>
+History
+</li>
+
+</ul>
+
+</aside>
+
+<main class="main-content">
+
+<div class="glass"
+style="padding:40px;">
+
+<h1>PDF Uploads</h1>
+
+<input type="file">
+
+<br><br>
+
+<button>
+Upload PDF
+</button>
+
+</div>
+
+</main>
+
+</div>
+
+</body>
+
+</html>

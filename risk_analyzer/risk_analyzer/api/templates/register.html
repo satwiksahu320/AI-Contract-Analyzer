@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskAI | Register</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="auth-body">
+<section class="auth-card panel">
+    <p class="eyebrow">Create workspace</p>
+    <h1>Start with RiskAI</h1>
+    <p class="auth-subtitle">Create an account to keep your predictions and profile history.</p>
+
+    {% if form.errors %}
+    <div class="form-error">
+        <strong>Please fix the following:</strong>
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <form method="POST" class="auth-form">
+        {% csrf_token %}
+        <label for="id_username">Username</label>
+        <input id="id_username" type="text" name="username" placeholder="Username" required>
+
+        <label for="id_password1">Password</label>
+        <input id="id_password1" type="password" name="password1" placeholder="Password" required>
+
+        <label for="id_password2">Confirm password</label>
+        <input id="id_password2" type="password" name="password2" placeholder="Confirm password" required>
+
+        <button type="submit">Create account</button>
+    </form>
+
+    <p class="auth-link">Already registered? <a href="/api/login/">Login</a></p>
+</section>
+</body>
+
+</html>

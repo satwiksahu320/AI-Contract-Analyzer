@@ -1,0 +1,219 @@
+{% load static %}
+{% static 'img/default-avatar.svg' as default_avatar %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>RiskAI | Financial Risk Analyzer</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="/api/">
+            <span class="brand-mark">R</span>
+            <span>
+                <strong>RiskAI</strong>
+                <small>Credit intelligence</small>
+            </span>
+        </a>
+
+        <nav class="menu" aria-label="Primary navigation">
+            <a class="active" href="/api/"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="/api/history/"><i class="fa-solid fa-clock-rotate-left"></i> History</a>
+            <a href="/api/profile/"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="/api/logout/"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Financial risk workspace</p>
+                <h1>Analyze borrower and document risk</h1>
+            </div>
+            <a class="profile-pill" href="/api/profile/" aria-label="Open profile">
+                <img
+                    src="{{ profile.profile_picture.url }}"
+                    alt=""
+                    onerror="this.onerror=null; this.src='{{ default_avatar }}';"
+                >
+                <span>{{ request.user.username }}</span>
+            </a>
+        </header>
+
+        <div class="tab-switcher" role="tablist" aria-label="Workspace sections">
+            <button class="tab-button active" type="button" data-tab="riskPanel">
+                <i class="fa-solid fa-shield-halved"></i>
+                Risk
+            </button>
+            <button class="tab-button" type="button" data-tab="marketPanel">
+                <i class="fa-solid fa-chart-simple"></i>
+                Markets
+            </button>
+            <button class="tab-button" type="button" data-tab="newsPanel">
+                <i class="fa-regular fa-newspaper"></i>
+                News
+            </button>
+        </div>
+
+        <section class="tab-panel active" id="riskPanel">
+            <section class="stats-grid" aria-label="Risk summary">
+                <article class="metric-card">
+                    <span>Total predictions</span>
+                    <strong>{{ total_predictions }}</strong>
+                </article>
+                <article class="metric-card">
+                    <span>High risk cases</span>
+                    <strong>{{ high_risk_count }}</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Average confidence</span>
+                    <strong>{{ average_score }}%</strong>
+                </article>
+            </section>
+
+            <section class="workspace-grid">
+                <article class="panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Manual review</p>
+                        <h2>Text analysis</h2>
+                    </div>
+
+                    <form id="riskForm" class="analysis-form">
+                        <label for="companyName">Company name</label>
+                        <input id="companyName" type="text" placeholder="Acme Finance Ltd">
+
+                        <label for="financialText">Financial report text</label>
+                        <textarea id="financialText" placeholder="Paste borrower notes, statements, or financial summary..." rows="10" required></textarea>
+
+                        <button type="submit" id="analyzeBtn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            Analyze text
+                        </button>
+                    </form>
+                </article>
+
+                <article class="panel result-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Model output</p>
+                        <h2>Risk result</h2>
+                    </div>
+
+                    <div class="risk-circle" aria-live="polite">
+                        <div class="circle">
+                            <span id="riskValue">0%</span>
+                        </div>
+                    </div>
+
+                    <h3 id="riskLabel">Waiting for analysis</h3>
+                    <p id="riskMessage">Submit text or upload a PDF to generate a risk classification.</p>
+                    <p class="status-message" id="statusMessage" role="status"></p>
+                </article>
+            </section>
+
+            <section class="panel upload-panel">
+                <div class="panel-heading">
+                    <p class="eyebrow">Document intake</p>
+                    <h2>Upload financial PDF</h2>
+                </div>
+
+                <div class="upload-box">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <div>
+                        <strong>PDF statements, salary slips, tax reports</strong>
+                        <span>Maximum 5 MB and 20 pages.</span>
+                    </div>
+                    <input type="file" id="pdfFile" accept="application/pdf,.pdf">
+                    <button type="button" id="uploadBtn">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        Analyze PDF
+                    </button>
+                </div>
+            </section>
+        </section>
+
+        <section class="tab-panel" id="marketPanel">
+            <section class="market-grid">
+                <article class="panel market-hero">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Live equities</p>
+                        <h2>Search stock performance</h2>
+                    </div>
+
+                    <form id="stockSearchForm" class="stock-search">
+                        <label for="stockSymbol">Ticker symbol</label>
+                        <div class="search-row">
+                            <input id="stockSymbol" type="text" placeholder="AAPL, NVDA, MSFT" value="NVDA">
+                            <button type="submit" id="stockSearchBtn">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="stock-summary">
+                        <span id="stockSymbolLabel">NVDA</span>
+                        <strong id="stockPriceLabel">Loading...</strong>
+                        <em id="stockChangeLabel"></em>
+                    </div>
+
+                    <div class="chart-wrap">
+                        <canvas id="stockChart" width="900" height="320"></canvas>
+                    </div>
+
+                    <p class="status-message" id="marketStatus" role="status"></p>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Top watchlist</p>
+                        <h2>Leading companies</h2>
+                    </div>
+                    <div class="company-list" id="topCompanies">
+                        <p class="muted-text">Loading top performers...</p>
+                    </div>
+                </article>
+            </section>
+        </section>
+
+        <section class="tab-panel" id="newsPanel">
+            <section class="news-grid">
+                <article class="panel news-search-panel">
+                    <div class="panel-heading">
+                        <p class="eyebrow">Market intelligence</p>
+                        <h2>Finance news</h2>
+                    </div>
+                    <form id="newsSearchForm" class="stock-search">
+                        <label for="newsQuery">Search news topic</label>
+                        <div class="search-row">
+                            <input id="newsQuery" type="text" value="financial markets risk" placeholder="inflation, banking, earnings">
+                            <button type="submit" id="newsSearchBtn">
+                                <i class="fa-solid fa-rss"></i>
+                                Load news
+                            </button>
+                        </div>
+                    </form>
+                    <p class="status-message" id="newsStatus" role="status"></p>
+                </article>
+
+                <div class="news-list" id="newsList">
+                    <article class="panel">
+                        <p class="muted-text">Loading latest finance news...</p>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+{% load static %}
+{% static 'img/default-avatar.svg' as default_avatar %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskAI | Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+<main class="centered-page">
+    <section class="profile-card panel">
+        <div class="profile-top">
+            <div>
+                <p class="eyebrow">Account settings</p>
+                <h1>Profile</h1>
+            </div>
+            <a class="secondary-button" href="/api/">Back to dashboard</a>
+        </div>
+
+        <div class="profile-image-wrapper">
+            <img
+                src="{{ profile.profile_picture.url }}"
+                class="profile-big-image"
+                alt="Profile photo"
+                onerror="this.onerror=null; this.src='{{ default_avatar }}';"
+            >
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.profile_picture.id_for_label }}">Profile picture</label>
+                <input
+                    type="file"
+                    name="{{ form.profile_picture.html_name }}"
+                    id="{{ form.profile_picture.id_for_label }}"
+                    accept="image/*"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.full_name.id_for_label }}">Full name</label>
+                {{ form.full_name }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.phone.id_for_label }}">Phone number</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.bio.id_for_label }}">Bio</label>
+                {{ form.bio }}
+            </div>
+
+            <button type="submit">Save changes</button>
+        </form>
+
+        <div class="danger-zone">
+            <div class="danger-actions">
+                <form method="POST" action="/api/delete-profile-pic/">
+                    {% csrf_token %}
+                    <button class="secondary-button danger-muted" type="submit">Remove photo</button>
+                </form>
+                <form method="POST" action="/api/delete-account/" onsubmit="return confirm('Permanently delete your account? This cannot be undone.');">
+                    {% csrf_token %}
+                    <button class="danger-button" type="submit">Delete account</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+
+</html>
